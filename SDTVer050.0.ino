@@ -2689,10 +2689,8 @@ void setup() {
   sdCardPresent = InitializeSDCard();  // Is there an SD card that can be initialized?
 
   // =============== Into EEPROM section =================
-  EEPROMSaveDefaults2();        // New code  UNCOMMENT THE FIRST TIME CODE COMPILED/UPLOADED. THEN RECOMMENT, SAVE< COMPILE?UPLOAD.
-
+  //EEPROMSaveDefaults2();EEPROM.put(EEPROM_BASE_ADDRESS, EEPROMData);        // New code  UNCOMMENT THE FIRST TIME CODE COMPILED/UPLOADED. THEN RECOMMENT, SAVE< COMPILE?UPLOAD.
   EEPROMStartup();                  // Original code
-
   syncEEPROM = 1;  // We've read current EEPROM values
 #ifdef DEBUG
   EEPROMShow();
@@ -2700,7 +2698,7 @@ void setup() {
 
   // Push and hold a button at power up to activate switch matrix calibration.
   // Uncomment this code block to enable this feature.  Len KD0RC
-  /* Remove this line and the matching block comment line below to activate.
+  ///* Remove this line and the matching block comment line below to activate.
   minPinRead = analogRead(BUSY_ANALOG_PIN);
   if (minPinRead < NOTHING_TO_SEE_HERE) {
     tft.fillWindow(RA8875_BLACK);
@@ -2712,7 +2710,7 @@ void setup() {
     SaveAnalogSwitchValues();
     EEPROMRead();  // Call to reset switch matrix values
   }                // KD0RC end
-  Remove this line and the matching block comment line above to activate. */
+  //Remove this line and the matching block comment line above to activate. */
 
   spectrum_x = 10;
   spectrum_y = 150;

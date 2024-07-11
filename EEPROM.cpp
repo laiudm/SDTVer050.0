@@ -374,6 +374,7 @@ void EEPROMShow()
    int i;
 
   Serial.println("----- EEPROM Parameters: -----");
+  Serial.print("ITU_REGION: "); Serial.println(ITU_REGION);
 
   Serial.print("Version                         = ");
   Serial.println(EEPROMData.versionSettings);
@@ -1165,7 +1166,6 @@ void EEPROMSaveDefaults2() {
   EEPROMData.xmitEQFlag     = 0;
   EEPROMData.CWToneIndex    = 2;
 
-  
 }
 
 /*****

@@ -7,13 +7,13 @@
 #define MAP_FILE_NAME   					"Cincinnati.bmp"                          // Name you gave to BMP map file. Max is 50 chars
 #define MY_LAT										39.07466                                  // Coordinates for QTH
 #define MY_LON										-84.42677
-#define MY_CALL										"AC8GY"                                   // Default max is 10 chars
-#define MY_TIMEZONE          			"EST: "                                   // Default max is 10 chars
+#define MY_CALL										"M0JTS"                                   // Default max is 10 chars
+#define MY_TIMEZONE          			"UT: "                                   // Default max is 10 chars
 //DB2OO, 29-AUG-23: TIME_24H to display 24 hour times (Utility.cpp). If this is not defined 12h display will be used
 #define TIME_24H                  1
 //DB2OO, 29-AUG-23: ITU_REGION to determine band borders: Upper band limits on 80m (3.8MHz vs 4.0MhHz) and 40m (7.2MHz vs. 7.3MHz)
-//#define ITU_REGION                1 //for Europe
-#define ITU_REGION                  2   // for USA
+#define ITU_REGION                1 //for Europe
+//#define ITU_REGION                  2   // for USA
 //#define ITU_REGION    3   // Asia/Oceania
 // DB2OO, 29.823:. Analog Signal on this pin will be used for an analog S-Meter (250uA full scale) connected via 10kOhm to this output. 1uF capacitor paralle to the S-Meter. --> Display.cpp. 
 // This might conflict with other hardware modifications, that might use Pin 33 for a different purpose --> please check, before defining this
@@ -29,7 +29,7 @@
 //#define SD_CARD_PRESENT         0                                         //   JJP  7/18/23
 
 //====================== System specific ===============
-#define CURRENT_FREQ_A            7200000                                   // VFO_A
+#define CURRENT_FREQ_A            7100000                                   // VFO_A
 #define CURRENT_FREQ_B            7030000                                   // VFO_B
 #define DEFAULTFREQINCREMENT 		  4                                         // Default: (10, 50, 100, 250, 1000, 10000Hz)
 #define DEFAULT_POWER_LEVEL       10                                        // Startup power level. Probably 20 for most people
