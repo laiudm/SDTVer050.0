@@ -1,6 +1,10 @@
 #ifndef BEENHERE
 #define BEENHERE
 
+#define M0JTSBUTTONINJECT
+extern int M0JTSButtonPressed;
+extern int M0JTSTrigger;
+
 //======================================== User section that might need to be changed ===================================
 #include "MyConfigurationFile.h"                                          // This file name should remain unchanged
 #define VERSION                     "V050.0"                              // Change this for updates. If you make this longer than 9 characters, brace yourself for surprises
@@ -35,7 +39,8 @@ extern struct maps myMapFiles[];
 #include "si5351.h"
 //#include <si5351.h>                                 // https://github.com/etherkit/Si5351Arduino
 #include <RA8875.h>                                 // https://github.com/mjs513/RA8875/tree/RA8875_t4
-#include <Rotary.h>                                 // https://github.com/brianlow/Rotary
+//#include <Rotary.h>                                 // https://github.com/brianlow/Rotary
+#include "Rotary.h"     // M0JTS stubbed Rotary
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

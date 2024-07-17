@@ -168,7 +168,7 @@ int SetPrimaryMenuIndex()
     val = ReadSelectedPushButton();  // Read the ladder value
 
     MyDelay(150L);
-    if (val != -1 && val < (EEPROMData.switchValues[0] + WIGGLE_ROOM)) {      // Did they press Select?
+    if (val != -1 /*M0JTS && val < (EEPROMData.switchValues[0] + WIGGLE_ROOM)*/) {      // Did they press Select?
       val = ProcessButtonPress(val);                                          // Use ladder value to get menu choice
 
       if (mainMenuWindowActive == true && val == MENU_BAILOUT_VALUE) {       // Cancel out of the main menu choices

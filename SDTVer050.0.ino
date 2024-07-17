@@ -557,6 +557,10 @@ V046d June 27, 2023  Jack Purdum (W8TEE) and includes changes by Greg:
 #ifndef BEENHERE
 #include "SDT.h"
 #endif
+
+int M0JTSButtonPressed = -1;  // inject button presses via the serial port instead
+int M0JTSTrigger = 0;
+
 /*                                  Presented here so you can see how the members allign
 struct maps {
   char mapNames[50];
@@ -2567,6 +2571,8 @@ void Splash() {
   tft.fillWindow(RA8875_BLACK);
 }
 
+IntervalTimer myTimer;
+
 //===============================================================================================================================
 //==========================  Setup ================================
 /*****
@@ -2693,12 +2699,12 @@ void setup() {
   EEPROMStartup();                  // Original code
   syncEEPROM = 1;  // We've read current EEPROM values
 #ifdef DEBUG
-  EEPROMShow();
+  //EEPROMShow();
 #endif
 
   // Push and hold a button at power up to activate switch matrix calibration.
   // Uncomment this code block to enable this feature.  Len KD0RC
-  ///* Remove this line and the matching block comment line below to activate.
+  /* Remove this line and the matching block comment line below to activate.
   minPinRead = analogRead(BUSY_ANALOG_PIN);
   if (minPinRead < NOTHING_TO_SEE_HERE) {
     tft.fillWindow(RA8875_BLACK);
@@ -2710,7 +2716,7 @@ void setup() {
     SaveAnalogSwitchValues();
     EEPROMRead();  // Call to reset switch matrix values
   }                // KD0RC end
-  //Remove this line and the matching block comment line above to activate. */
+  Remove this line and the matching block comment line above to activate. */
 
   spectrum_x = 10;
   spectrum_y = 150;
@@ -2796,9 +2802,11 @@ void setup() {
   comp1.setPreGain_dB(-10);  //set the gain of the Left-channel gain processor
   comp2.setPreGain_dB(-10);  //set the gain of the Right-channel gain processor
 
-  sdCardPresent = SDPresentCheck();  // JJP 7/18/23
+  sdCardPresent = 0; //M0JTS - no SD card fitted SDPresentCheck();  // JJP 7/18/23
   lastState = 1111;                  // To make sure the receiver will be configured on the first pass through.  KF5N September 3, 2023
   decodeStates = state0;             // Initialize the Morse decoder.
+
+  myTimer.begin(processSerial, 100000);  //0.1 sec
 }
 //============================================================== END setup() =================================================================
 //===============================================================================================================================
@@ -2815,6 +2823,60 @@ elapsedMicros usec = 0;  // Automatically increases as time passes; no ++ necess
   Return value:
     void
 *****/
+
+void AdjustRFGain(int delta) {
+  rfGainAllBands +=delta;
+  Serial.print("Gain = ");Serial.println(rfGainAllBands);
+}
+
+void processSerial() {
+  if (Serial.available() ) {
+    int ch = Serial.read();
+
+    if (ch == '?') {
+      Serial.println("Serial working");
+      Serial.print("mute = "); Serial.println(mute);
+      Serial.print("audioVolume = "); Serial.println(audioVolume);
+      Serial.print("Audio multiplier = "); Serial.println(DF * VolumeToAmplification(audioVolume));
+      //Serial.print("bands[currentBand].mode = "); Serial.println(bands[currentBand].mode);
+      Serial.print("AGC Mode: "); Serial.println(AGCMode);
+      Serial.print("Fixed gain: "); Serial.println(fixed_gain);
+      Serial.print("receiveEQFlag = "); Serial.println(receiveEQFlag);
+      Serial.print("N_BLOCKS = "); Serial.println(N_BLOCKS);
+      Serial.print("NR_Index = "); Serial.println(NR_Index);
+      Serial.print("ANR_notchOn = "); Serial.println(ANR_notchOn);
+      Serial.print("NB_on = "); Serial.println(NB_on);
+      Serial.print("T41State = "); Serial.println(T41State);
+    }
+    
+    //if (ch == 'v') volumeAdjust.gain(1.0);
+    //if (ch == 'V') volumeAdjust.gain(0.0);
+    if (ch == 'A') AGCMode = 0;
+    
+    if (ch == 'G') AdjustRFGain(0);
+    if (ch == '+') AdjustRFGain(10);
+    if (ch == '-') AdjustRFGain(-10);
+
+    //aif ((ch >= '0') && (ch <= '9')) M0JTSTrigger = ch;  // trigger debug output
+
+    //if (ch =='a') { modeSelectOutL.gain(0, 1); modeSelectOutR.gain(0, 1); }
+    
+    if (ch >= 'a' && ch <= 'r') { // 'a' upwards replace the buttons from 0 upwards, the first button being MENU_OPTION_SELECT
+      M0JTSButtonPressed = ch - 'a' + MENU_OPTION_SELECT; 
+    }
+
+    // emulate the rotary encoders
+    if (ch == '1') { volumeEncoder.injectEvent(DIR_CCW);  EncoderVolume(); }
+    if (ch == '2') { volumeEncoder.injectEvent(DIR_CW);   EncoderVolume(); }
+    if (ch == '3') { tuneEncoder.injectEvent(DIR_CCW); }  // main code doesn't attach interrupts
+    if (ch == '4') { tuneEncoder.injectEvent(DIR_CW);  }
+    if (ch == '5') { filterEncoder.injectEvent(DIR_CCW);   EncoderFilter(); }
+    if (ch == '6') { filterEncoder.injectEvent(DIR_CW);    EncoderFilter(); }
+    if (ch == '7') { fineTuneEncoder.injectEvent(DIR_CCW);  EncoderFineTune(); }
+    if (ch == '8') { fineTuneEncoder.injectEvent(DIR_CW);   EncoderFineTune(); }       
+  }
+}
+
 FASTRUN void loop()  // Replaced entire loop() with Greg's code  JJP  7/14/23
 {
   int pushButtonSwitchIndex = -1;

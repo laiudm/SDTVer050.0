@@ -317,6 +317,15 @@ void ProcessIQData()
      **********************************************************************************/
 
     arm_cmplx_mult_cmplx_f32 (FFT_buffer, FIR_filter_mask, iFFT_buffer, FFT_length);
+    
+    if (M0JTSTrigger == '1') {
+      M0JTSTrigger = 0;
+      for (int i = 0; i < FFT_length; i++) {  // FFT_LENGTH = FFT_length = 512
+        if ((i % 8) == 0) Serial.println();
+        Serial.print(100000.0*iFFT_buffer[i*2]); Serial.print(", "); Serial.print(100000.0*iFFT_buffer[i*2+1]); Serial.print(", ");
+      }
+    }
+    
     if (updateDisplayFlag == 1) {
       for (int k = 0; k < 1024; k++) {
         audioSpectBuffer[1024 - k] = (iFFT_buffer[k] * iFFT_buffer[k]);
@@ -371,6 +380,17 @@ void ProcessIQData()
         we´re back in time domain
         AGC acts upon I & Q before demodulation on the decimated audio data in iFFT_buffer
      **********************************************************************************/
+
+    
+    if (M0JTSTrigger=='2') {
+      M0JTSTrigger = 0;
+      for (int i = 0; i < FFT_length; i++) {
+        //Serial.println(float_buffer_L[i]); Serial.print(" ");
+        if ((i % 8) == 0) Serial.println();
+        Serial.print(100000.0*iFFT_buffer[i*2]); Serial.print(", "); Serial.print(100000.0*iFFT_buffer[i*2+1]); Serial.print(", ");
+      }
+    }
+         
     AGC();  //AGC function works with time domain I and Q data buffers created in the last step
 
     //============================  Demod  ========================
@@ -434,6 +454,15 @@ void ProcessIQData()
         
     }
     // == AFP 10-30-22
+
+    if (M0JTSTrigger == '3') {
+      M0JTSTrigger = 0;
+      Serial.println("audio: ");
+      for (int i = 0; i < FFT_length/2; i++) {
+        if ((i % 8) == 0) Serial.println();
+        Serial.print(100000.0*float_buffer_L[i]); Serial.print(" ");
+      }
+    }
 
     //============================  Receive EQ  ========================  AFP 08-08-22
     if (receiveEQFlag == ON ) {
@@ -548,8 +577,8 @@ void ProcessIQData()
       arm_scale_f32(float_buffer_L, 0.0, float_buffer_L, BUFFER_SIZE * N_BLOCKS);
       arm_scale_f32(float_buffer_R, 0.0, float_buffer_R, BUFFER_SIZE * N_BLOCKS);
     } else if (mute == 0) {
-      arm_scale_f32(float_buffer_L, DF * VolumeToAmplification(audioVolume), float_buffer_L, BUFFER_SIZE * N_BLOCKS);
-      arm_scale_f32(float_buffer_R, DF * VolumeToAmplification(audioVolume), float_buffer_R, BUFFER_SIZE * N_BLOCKS);
+      arm_scale_f32(float_buffer_L, 100.0 * DF * VolumeToAmplification(audioVolume), float_buffer_L, BUFFER_SIZE * N_BLOCKS);
+      arm_scale_f32(float_buffer_R, 100.0 * DF * VolumeToAmplification(audioVolume), float_buffer_R, BUFFER_SIZE * N_BLOCKS);
     }
     /**********************************************************************************  AFP 12-31-20
       CONVERT TO INTEGER AND PLAY AUDIO

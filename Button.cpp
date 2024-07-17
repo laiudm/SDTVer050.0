@@ -13,6 +13,9 @@
     int                   -1 if not valid push button, index of push button if valid
 *****/
 int ProcessButtonPress(int valPin) {
+#ifdef M0JTSBUTTONINJECT
+  return valPin;
+#else
   int switchIndex;
 
   if (valPin == BOGUS_PIN_READ) {  // Not valid press
@@ -29,6 +32,7 @@ int ProcessButtonPress(int valPin) {
     }
   }
   return -1;  // Really should never do this
+#endif
 }
 
 /*****
@@ -41,6 +45,11 @@ int ProcessButtonPress(int valPin) {
     int                   -1 if not valid push button, ADC value if valid
 *****/
 int ReadSelectedPushButton() {
+#ifdef M0JTSBUTTONINJECT
+  int returnValue = M0JTSButtonPressed;
+  M0JTSButtonPressed = -1;
+  return returnValue;
+#else
   minPinRead = 0;
   int buttonReadOld = 1023;
 
@@ -60,6 +69,7 @@ int ReadSelectedPushButton() {
   //("    minPinRead = ");
   //Serial.println(minPinRead);
   return minPinRead;
+#endif
 }
 
 /*****

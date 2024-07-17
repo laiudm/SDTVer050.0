@@ -374,7 +374,6 @@ void EEPROMShow()
    int i;
 
   Serial.println("----- EEPROM Parameters: -----");
-  Serial.print("ITU_REGION: "); Serial.println(ITU_REGION);
 
   Serial.print("Version                         = ");
   Serial.println(EEPROMData.versionSettings);
