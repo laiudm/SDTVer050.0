@@ -247,7 +247,7 @@ void ProcessIQData()
     arm_fir_decimate_f32(&FIR_dec2_I, float_buffer_L, float_buffer_L, BUFFER_SIZE * N_BLOCKS / (uint32_t)DF1);
     arm_fir_decimate_f32(&FIR_dec2_Q, float_buffer_R, float_buffer_R, BUFFER_SIZE * N_BLOCKS / (uint32_t)DF1);
 
-
+/* M0JTS This isn't needed when the interpolation filter bandwidth is fixed
     // =================  AFP 10-21-22 Level Adjust ===========
     float freqKHzFcut;
     float volScaleFactor;
@@ -259,6 +259,7 @@ void ProcessIQData()
     volScaleFactor = 7.0874 * pow(freqKHzFcut, -1.232);
     arm_scale_f32(float_buffer_L, volScaleFactor, float_buffer_L, FFT_length / 2);
     arm_scale_f32(float_buffer_R, volScaleFactor, float_buffer_R, FFT_length / 2);
+*/
 
     //=================  AFP 10-21-22  =================
     /**********************************************************************************  AFP 12-31-20
@@ -323,6 +324,14 @@ void ProcessIQData()
       for (int i = 0; i < FFT_length; i++) {  // FFT_LENGTH = FFT_length = 512
         if ((i % 8) == 0) Serial.println();
         Serial.print(100000.0*iFFT_buffer[i*2]); Serial.print(", "); Serial.print(100000.0*iFFT_buffer[i*2+1]); Serial.print(", ");
+      }
+    }
+
+    if (M0JTSTrigger == 'M') {  // dump  FIR_filter_mask: defn: float32_t DMAMEM FIR_filter_mask[FFT_LENGTH * 2]
+      M0JTSTrigger = 0;
+      for (int i = 0; i < FFT_length; i++) {  // FFT_LENGTH = FFT_length = 512
+        if ((i % 8) == 0) Serial.println();
+        Serial.print(FIR_filter_mask[i*2]); Serial.print(", "); Serial.print(FIR_filter_mask[i*2+1]); Serial.print(", ");
       }
     }
     

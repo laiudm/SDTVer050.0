@@ -1,6 +1,6 @@
 // inspired by uSDX code at https://github.com/threeme3/usdx
 
-#define F_XTAL ((uint32_t) (25000000.0 * 5.000600 / 5.0) )
+#define F_XTAL ((uint32_t) (25000000.0 * 7.08080 / 7.080) )  // Correction factor calculated 17 July 2024
 #define SI5351_ADDR 0x60
 #define SI_CLK_OE 3
 

@@ -1394,7 +1394,7 @@ int InitializeSDCard() {
   tft.setCursor(100, 240);
   if (!SD.begin(chipSelect)) {
     tft.print("SD card cannot be initialized.");
-    MyDelay(2000L);  // Given them time to read it.
+    //MOJTS temporarily remove delay MyDelay(2000L);  // Given them time to read it.
     return 0;
   }
 

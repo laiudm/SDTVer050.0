@@ -241,10 +241,18 @@ void SetDecIntFilters()
   if (LP_F_help > 10000) {
     LP_F_help = 10000;
   }
+  
+  LP_F_help = 10000; //M0JTS - see if this reduces the audio HF drop-off
+  
   CalcFIRCoeffs(FIR_dec1_coeffs, n_dec1_taps, (float32_t)(LP_F_help), n_att, 0, 0.0, (float32_t)(SR[SampleRate].rate));
   CalcFIRCoeffs(FIR_dec2_coeffs, n_dec2_taps, (float32_t)(LP_F_help), n_att, 0, 0.0, (float32_t)(SR[SampleRate].rate / DF1));
 
   CalcFIRCoeffs(FIR_int1_coeffs, 48, (float32_t)(LP_F_help), n_att, 0, 0.0, (float32_t)(SR[SampleRate].rate / DF1));
   CalcFIRCoeffs(FIR_int2_coeffs, 32, (float32_t)(LP_F_help), n_att, 0, 0.0, (float32_t)SR[SampleRate].rate);
   bin_BW = 1.0 / (DF * FFT_length) * (float32_t)SR[SampleRate].rate;
+
+  Serial.print("SetDecIntFilters() - bands[currentBand].FHiCut = "); Serial.print(bands[currentBand].FHiCut);
+  Serial.print(", bands[currentBand].FLoCut = "); Serial.print(bands[currentBand].FLoCut); 
+  Serial.print(", LP_F_help = "); Serial.print(LP_F_help);
+  Serial.print(", bin_BW = "); Serial.println(bin_BW);
 }

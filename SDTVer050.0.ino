@@ -2840,13 +2840,15 @@ void processSerial() {
       Serial.print("Audio multiplier = "); Serial.println(DF * VolumeToAmplification(audioVolume));
       //Serial.print("bands[currentBand].mode = "); Serial.println(bands[currentBand].mode);
       Serial.print("AGC Mode: "); Serial.println(AGCMode);
-      Serial.print("Fixed gain: "); Serial.println(fixed_gain);
-      Serial.print("receiveEQFlag = "); Serial.println(receiveEQFlag);
-      Serial.print("N_BLOCKS = "); Serial.println(N_BLOCKS);
-      Serial.print("NR_Index = "); Serial.println(NR_Index);
-      Serial.print("ANR_notchOn = "); Serial.println(ANR_notchOn);
-      Serial.print("NB_on = "); Serial.println(NB_on);
-      Serial.print("T41State = "); Serial.println(T41State);
+      //Serial.print("Fixed gain: "); Serial.println(fixed_gain);
+      //Serial.print("receiveEQFlag = "); Serial.println(receiveEQFlag);
+      //Serial.print("N_BLOCKS = "); Serial.println(N_BLOCKS);
+      //Serial.print("NR_Index = "); Serial.println(NR_Index);
+      //Serial.print("ANR_notchOn = "); Serial.println(ANR_notchOn);
+      //Serial.print("NB_on = "); Serial.println(NB_on);
+      //Serial.print("T41State = "); Serial.println(T41State);
+      Serial.print("bands[currentBand].FHiCut = "); Serial.println(bands[currentBand].FHiCut);
+      Serial.print("bands[currentBand].FLoCut = "); Serial.println(bands[currentBand].FLoCut);
     }
     
     //if (ch == 'v') volumeAdjust.gain(1.0);
@@ -2857,7 +2859,8 @@ void processSerial() {
     if (ch == '+') AdjustRFGain(10);
     if (ch == '-') AdjustRFGain(-10);
 
-    //aif ((ch >= '0') && (ch <= '9')) M0JTSTrigger = ch;  // trigger debug output
+    //if ((ch >= '0') && (ch <= '9')) M0JTSTrigger = ch;  // trigger debug output
+    if ((ch >= 'M') && (ch<='Z')) M0JTSTrigger = ch;  // trigger debug output
 
     //if (ch =='a') { modeSelectOutL.gain(0, 1); modeSelectOutR.gain(0, 1); }
     

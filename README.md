@@ -9,9 +9,13 @@ Source code changes by M0JTS are intended to support his hardware/software varia
 
 This is a work in progress. Use at your own risk.
 
-## First Update:
+## 17 July 2024 First Update:
 
 - Added a very simple serial debug command interface. It's driven by timer interrupts so it will work even when the main loop() code "gets stuck".
 - Added mock interfaces for the buttons and the rotary encoders. I don't want lots of hardware in my test setup at this early stage.
 - Added debug code to track why receive audio wasn't working. Finally tracked down the problem to the digital volume gain being far too low. I've increased it x100 & it now works.
 
+## Update:
+
+- Manually calibrated the si5351 25MHz clock
+- Temporarily removed the SD Card initialization delay
